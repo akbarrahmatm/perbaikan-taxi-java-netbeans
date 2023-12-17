@@ -4,10 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/frm/frmPerbaikanTaxi.java</file>
-            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/projectperbaikantaxi/ProjectPerbaikanTaxi.java</file>
-            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/db/dbConnection.java</file>
-            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ctr/ctrArmada.java</file>
-            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ent/entArmada.java</file>
+            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ent/entJenisPerbaikan.java</file>
+            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ctr/ctrJnsPerbaikan.java</file>
+            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ctr/ctrFakturPerbaikan.java</file>
+            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ent/entFakturPerbaikan.java</file>
         </group>
     </open-files>
 </project-private>
