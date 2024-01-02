@@ -24,6 +24,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
+
 
 /**
  *
@@ -64,6 +68,8 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         txtTahunFaktur.setEnabled(false);
         txtNamaMekanikFaktur.setEnabled(false);
         txtNoTelpFaktur.setEnabled(false);
+        
+        btnCetak.setVisible(false);
     }
     
     public void setAppInformation(){
@@ -513,7 +519,7 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         if(oFaktur.getDataFakturPerbaikan()[1].isEmpty() || oFaktur.getDataFakturPerbaikan()[2].isEmpty() || oFaktur.getDataFakturPerbaikan()[3].isEmpty()){
             btnEditFaktur.setVisible(false);
             btnDeleteFaktur.setVisible(false);
-
+            btnCetak.setVisible(false);
         } else{
             txtNoArmadaFaktur.setText(oFaktur.getDataFakturPerbaikan()[1]);
             txtNoMekanikFaktur.setText(oFaktur.getDataFakturPerbaikan()[2]);
@@ -527,6 +533,8 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
             
             btnEditFaktur.setVisible(true);
             btnDeleteFaktur.setVisible(true);
+            
+            btnCetak.setVisible(true);
             
             titleTableFaktur();
         }
@@ -558,6 +566,8 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         btnEditFaktur.setVisible(true);
         btnDeleteFaktur.setVisible(true);
         btnClearFaktur.setVisible(true);
+        
+        btnCetak.setVisible(false);
         
         tabModel.getDataVector().removeAllElements();
         tabModel.fireTableDataChanged();
@@ -1399,6 +1409,11 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         );
 
         btnCetak.setText("Cetak");
+        btnCetak.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCetakMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout contentFakturPerbaikanLayout = new javax.swing.GroupLayout(contentFakturPerbaikan);
         contentFakturPerbaikan.setLayout(contentFakturPerbaikanLayout);
@@ -2435,6 +2450,7 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
     private void txtNoFakturPerbaikanFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNoFakturPerbaikanFocusLost
         // TODO add your handling code here:
         this.setKdFakturPerbaikan(txtNoFakturPerbaikan.getText());
+        
     }//GEN-LAST:event_txtNoFakturPerbaikanFocusLost
 
     private void btnSaveFakturMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveFakturMouseClicked
@@ -2509,6 +2525,21 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         this.deleteFaktur();
         clearFormFaktur();
     }//GEN-LAST:event_btnDeleteFakturMouseClicked
+
+    private void btnCetakMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCetakMouseClicked
+        // TODO add your handling code here:
+        try {
+        String reportPath = "src/report/report_FakturPerbaikan.jasper";
+        Connection con = db.koneksiDB();
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("pNoFakturPerbaikan", txtNoFakturPerbaikan.getText());
+        JasperPrint print = JasperFillManager.fillReport(reportPath, parameters, con);
+        JasperViewer jasperViewer = new JasperViewer(print, false);
+        jasperViewer.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnCetakMouseClicked
 
     private void pilihItemBerdasarkanNoJenisPerbaikan(String noJenisPerbaikan) {
         // Mencari nama jenis perbaikan berdasarkan NoJenisPerbaikan

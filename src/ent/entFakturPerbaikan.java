@@ -30,6 +30,7 @@ public class entFakturPerbaikan {
         return this.atNoFakturPerbaikan;
     }
     
+    
     public void searchFakturPerbaikan(){
         String vSql =   "SELECT fakturperbaikan.NoFakturPerbaikan, fakturperbaikan.NoArmada, fakturperbaikan.NoMekanik, fakturperbaikan.TglFakturPerbaikan " +
                         "FROM fakturperbaikan WHERE fakturperbaikan.NoFakturPerbaikan='"+ this.atNoFakturPerbaikan +"'";

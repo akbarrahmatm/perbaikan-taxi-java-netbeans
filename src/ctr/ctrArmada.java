@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class ctrArmada {
     entArmada o = new entArmada();
     
+    
     public void setNoArmada(String pNoArmada){
         o.setNoArmada(pNoArmada);
         o.searchArmada();
