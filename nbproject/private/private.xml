@@ -5,8 +5,11 @@
         <group>
             <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/frm/frmPerbaikanTaxi.java</file>
             <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ent/entJenisPerbaikan.java</file>
+            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ent/entDetilFakturPerbaikan.java</file>
+            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ctr/ctrDetilFakturPerbaikan.java</file>
             <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ctr/ctrJnsPerbaikan.java</file>
             <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ctr/ctrFakturPerbaikan.java</file>
+            <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ctr/ctrArmada.java</file>
             <file>file:/C:/Users/ACER/Documents/NetBeansProjects/ProjectPerbaikanTaxi/src/ent/entFakturPerbaikan.java</file>
         </group>
     </open-files>

@@ -59,7 +59,7 @@ public class entArmada {
     
     public void insertArmada(){
         String vSql =   "INSERT INTO armada (armada.NoArmada, armada.NoPlat, armada.Merk, armada.Model, armada.Tahun) " +
-                        "VALUES ('"+ this.atNoArmada +"', '"+ this.atNoPlat +"', '"+ this.atMerk +"' ,'"+ this.atModel +"', '"+ this.atTahun +"')";
+                        "VALUES ('"+ this.atNoArmada +"', '"+ this.atNoPlat +"', '"+ this.atMerk +"', '"+ this.atModel +"', '"+ this.atTahun +"')";
         dbConnection db = new dbConnection();
         Connection con = db.koneksiDB();
         PreparedStatement Stat = null;

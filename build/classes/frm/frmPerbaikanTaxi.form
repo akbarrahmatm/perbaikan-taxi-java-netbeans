@@ -443,7 +443,8 @@
                               <Component id="jPanel13" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="btnCetak" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -454,7 +455,10 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel19" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel19" alignment="3" max="32767" attributes="0"/>
+                              <Component id="btnCetak" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jPanel13" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -693,6 +697,7 @@
                       <SubComponents>
                         <Component class="javax.swing.JTextField" name="txtNoArmadaFaktur">
                           <Events>
+                            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNoArmadaFakturFocusLost"/>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNoArmadaFakturActionPerformed"/>
                           </Events>
                         </Component>
@@ -700,6 +705,9 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Cari"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnSearchArmadaFakturMouseClicked"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel22">
                           <Properties>
@@ -780,13 +788,11 @@
                                           <Component id="jLabel3" min="-2" pref="154" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="spnJenisPerbaikan" min="-2" pref="260" max="-2" attributes="0"/>
-                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="49" max="32767" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace pref="8" max="32767" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                           <Component id="btnTambahDtlPerbaikan" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="btnEditDtlPerbaikan" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="btnDeleteDtlPerbaikan" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
@@ -813,17 +819,18 @@
                                       <Component id="jScrollPane5" alignment="0" max="32767" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="148" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="btnDeleteDtlPerbaikan" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnClearDtlPerbaikan" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnEditDtlPerbaikan" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnTambahDtlPerbaikan" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                          <Component id="btnDeleteDtlPerbaikan" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btnTambahDtlPerbaikan" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="btnClearDtlPerbaikan" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -872,6 +879,9 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Tambah Perbaikan"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnTambahDtlPerbaikanMouseClicked"/>
+                          </Events>
                         </Component>
                         <Container class="javax.swing.JScrollPane" name="jScrollPane5">
                           <AuxValues>
@@ -884,18 +894,13 @@
                             </Component>
                           </SubComponents>
                         </Container>
-                        <Component class="javax.swing.JButton" name="btnEditDtlPerbaikan">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Edit Perbaikan"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditDtlPerbaikanActionPerformed"/>
-                          </Events>
-                        </Component>
                         <Component class="javax.swing.JButton" name="btnDeleteDtlPerbaikan">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Hapus Perbaikan"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnDeleteDtlPerbaikanMouseClicked"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="btnClearDtlPerbaikan">
                           <Properties>
@@ -998,9 +1003,13 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Cari"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnSearchMekanikFakturMouseClicked"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JTextField" name="txtNoMekanikFaktur">
                           <Events>
+                            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtNoMekanikFakturFocusLost"/>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNoMekanikFakturActionPerformed"/>
                           </Events>
                         </Component>
@@ -1082,6 +1091,9 @@
                                   </Table>
                                 </Property>
                               </Properties>
+                              <Events>
+                                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblDetilFakturMouseClicked"/>
+                              </Events>
                             </Component>
                           </SubComponents>
                         </Container>
@@ -1097,11 +1109,17 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Hapus"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnDeleteFakturMouseClicked"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="btnEditFaktur">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Ubah"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnEditFakturMouseClicked"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="btnSaveFaktur">
                           <Properties>
@@ -1115,6 +1133,11 @@
                     </Container>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JButton" name="btnCetak">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Cetak"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="contentMArmada">

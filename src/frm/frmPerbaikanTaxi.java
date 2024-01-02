@@ -6,6 +6,7 @@
 package frm;
 
 import ctr.ctrArmada;
+import ctr.ctrDetilFakturPerbaikan;
 import ctr.ctrFakturPerbaikan;
 import ctr.ctrJnsPerbaikan;
 import ctr.ctrMekanik;
@@ -33,10 +34,12 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
     ctrJnsPerbaikan oJnsPerbaikan = new ctrJnsPerbaikan();
     ctrArmada oArmada = new ctrArmada();
     ctrFakturPerbaikan oFaktur = new ctrFakturPerbaikan();
+    ctrDetilFakturPerbaikan oDtlFaktur = new ctrDetilFakturPerbaikan();
     
     private Map<JPanel, JPanel> tabContentMap = new HashMap<>();
     private Map<String, String> jenisPerbaikanMap = new HashMap<>();
-    
+    private String NoFakturPerbaikan = "";
+        
     public Statement stat;
     public ResultSet res;
     public DefaultTableModel tabModel;
@@ -407,7 +410,7 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
     
     private void titleTableFaktur(){
         Object[] judul = {
-            "ID Jenis Perbaikan", "Nama Jenis Perbaikan", "Masalah"
+            "Nama Jenis Perbaikan", "Masalah"
         };
         tabModel = new DefaultTableModel(null, judul);
         tblDetilFaktur.setModel(tabModel);
@@ -425,7 +428,7 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
             tabModel.getDataVector().removeAllElements();
             tabModel.fireTableDataChanged();
             
-            String query =  "SELECT detilfakturperbaikan.NoJenisPerbaikan, jenisperbaikan.NamaJenisPerbaikan, detilfakturperbaikan.DtlMasalah " +
+            String query =  "SELECT jenisperbaikan.NamaJenisPerbaikan, detilfakturperbaikan.DtlMasalah " +
                             "FROM detilfakturperbaikan " +
                             "INNER JOIN jenisperbaikan ON detilfakturperbaikan.NoJenisPerbaikan = jenisperbaikan.NoJenisPerbaikan " +
                             "WHERE detilfakturperbaikan.NoFakturPerbaikan = '"+p+"'";
@@ -434,7 +437,6 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
 
             while (res.next()) {
                 Object[] data = {
-                    res.getString("NoJenisPerbaikan"),
                     res.getString("NamaJenisPerbaikan"),
                     res.getString("DtlMasalah"),
                 };
@@ -476,6 +478,10 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
     private String getIdJenisPerbaikan() {
         String selectedValue = spnJenisPerbaikan.getSelectedItem().toString();
         return jenisPerbaikanMap.get(selectedValue);
+    }
+    
+    private String getIndexJenisPerbaikan(String p){
+        return jenisPerbaikanMap.get(p);
     }
     
     public void searchArmada(String p){
@@ -546,12 +552,12 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         txtModel.setText("");
         txtTahun.setText("");
         
-        txtNoArmada.setEnabled(true);
+        txtNoFakturPerbaikan.setEnabled(true);
         
-        btnSaveArmada.setVisible(true);
-        btnUpdateArmada.setVisible(true);
-        btnDeleteArmada.setVisible(true);
-        btnClearArmada.setVisible(true);
+        btnSaveFaktur.setVisible(true);
+        btnEditFaktur.setVisible(true);
+        btnDeleteFaktur.setVisible(true);
+        btnClearFaktur.setVisible(true);
         
         tabModel.getDataVector().removeAllElements();
         tabModel.fireTableDataChanged();
@@ -561,6 +567,77 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
     public void clearFormDtlPerbaikan(){
         spnJenisPerbaikan.setSelectedIndex(0);
         txtMasalah.setText("");
+        titleTableFaktur();
+    } 
+    
+    public void saveDtlFaktur(){
+        if(txtMasalah.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Semua Kolom Harus Diisi", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(oDtlFaktur.isExist(txtNoFakturPerbaikan.getText(), getIdJenisPerbaikan())){
+                JOptionPane.showMessageDialog(null, "Perbaikan dengan Jenis Perbaikan ini sudah ada", "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                ArrayList<String> vLst = new ArrayList<>();
+
+                vLst.add(txtNoFakturPerbaikan.getText());
+                vLst.add(getIdJenisPerbaikan());
+                vLst.add(txtMasalah.getText());
+
+                oDtlFaktur.setDataFakturPerbaikan(vLst);
+                oDtlFaktur.save();
+                JOptionPane.showMessageDialog(null, "Simpan Data Berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            }
+            
+        }
+        
+        titleTableFaktur();
+    }
+    
+    public void deleteDtlFaktur(){
+        oDtlFaktur.setNoFakturPerbaikan(txtNoFakturPerbaikan.getText(), getIdJenisPerbaikan());
+        oDtlFaktur.delete();
+        clearFormDtlPerbaikan();
+        titleTableFaktur();
+        JOptionPane.showMessageDialog(null, "Hapus Data Berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void saveFaktur(){
+        if(txtNoFakturPerbaikan.getText().isEmpty() || txtNoArmadaFaktur.getText().isEmpty() || txtTglFakturPerbaikan.getText().isEmpty() || txtNoMekanikFaktur.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Semua Kolom Harus Diisi", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            ArrayList<String> vLst = new ArrayList<>();
+
+            vLst.add(txtNoFakturPerbaikan.getText());
+            vLst.add(txtNoArmadaFaktur.getText());
+            vLst.add(txtNoMekanikFaktur.getText());
+            vLst.add(txtTglFakturPerbaikan.getText());
+        
+            oFaktur.setDataFakturPerbaikan(vLst);
+            oFaktur.save();
+            JOptionPane.showMessageDialog(null, "Simpan Data Berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+        }        
+    }
+    
+    public void editFaktur(){
+        if(txtNoFakturPerbaikan.getText().isEmpty() || txtNoArmadaFaktur.getText().isEmpty() || txtTglFakturPerbaikan.getText().isEmpty() || txtNoMekanikFaktur.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Semua Kolom Harus Diisi", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            ArrayList<String> vLst = new ArrayList<>();
+
+            vLst.add(txtNoFakturPerbaikan.getText());
+            vLst.add(txtNoArmadaFaktur.getText());
+            vLst.add(txtNoMekanikFaktur.getText());
+            vLst.add(txtTglFakturPerbaikan.getText());
+        
+            oFaktur.setDataFakturPerbaikan(vLst);
+            oFaktur.edit();
+            JOptionPane.showMessageDialog(null, "Edit Data Berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    
+    public void deleteFaktur(){
+        oFaktur.delete();
+        JOptionPane.showMessageDialog(null, "Hapus Data Berhasil", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
     }
     
     // End Module Faktur
@@ -620,7 +697,6 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         btnTambahDtlPerbaikan = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         txtMasalah = new javax.swing.JTextPane();
-        btnEditDtlPerbaikan = new javax.swing.JButton();
         btnDeleteDtlPerbaikan = new javax.swing.JButton();
         btnClearDtlPerbaikan = new javax.swing.JButton();
         jPanel17 = new javax.swing.JPanel();
@@ -638,6 +714,7 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         btnDeleteFaktur = new javax.swing.JButton();
         btnEditFaktur = new javax.swing.JButton();
         btnSaveFaktur = new javax.swing.JButton();
+        btnCetak = new javax.swing.JButton();
         contentMArmada = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
@@ -942,6 +1019,11 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
 
         jPanel15.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        txtNoArmadaFaktur.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNoArmadaFakturFocusLost(evt);
+            }
+        });
         txtNoArmadaFaktur.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNoArmadaFakturActionPerformed(evt);
@@ -949,6 +1031,11 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         });
 
         btnSearchArmadaFaktur.setText("Cari");
+        btnSearchArmadaFaktur.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSearchArmadaFakturMouseClicked(evt);
+            }
+        });
 
         jLabel22.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -1043,17 +1130,20 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         jLabel21.setPreferredSize(new java.awt.Dimension(136, 33));
 
         btnTambahDtlPerbaikan.setText("Tambah Perbaikan");
-
-        jScrollPane5.setViewportView(txtMasalah);
-
-        btnEditDtlPerbaikan.setText("Edit Perbaikan");
-        btnEditDtlPerbaikan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditDtlPerbaikanActionPerformed(evt);
+        btnTambahDtlPerbaikan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnTambahDtlPerbaikanMouseClicked(evt);
             }
         });
 
+        jScrollPane5.setViewportView(txtMasalah);
+
         btnDeleteDtlPerbaikan.setText("Hapus Perbaikan");
+        btnDeleteDtlPerbaikan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteDtlPerbaikanMouseClicked(evt);
+            }
+        });
 
         btnClearDtlPerbaikan.setText("Bersih");
         btnClearDtlPerbaikan.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1082,12 +1172,10 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(spnJenisPerbaikan, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel16Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                        .addGap(0, 49, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnTambahDtlPerbaikan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEditDtlPerbaikan)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDeleteDtlPerbaikan)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1108,14 +1196,14 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
                     .addComponent(jScrollPane5)
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDeleteDtlPerbaikan)
-                    .addComponent(btnClearDtlPerbaikan)
-                    .addComponent(btnEditDtlPerbaikan)
-                    .addComponent(btnTambahDtlPerbaikan))
-                .addContainerGap())
+                        .addGap(0, 148, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnDeleteDtlPerbaikan)
+                        .addComponent(btnTambahDtlPerbaikan))
+                    .addComponent(btnClearDtlPerbaikan))
+                .addGap(7, 7, 7))
         );
 
         jPanel17.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -1129,7 +1217,17 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         jLabel27.setText("No. Mekanik :");
 
         btnSearchMekanikFaktur.setText("Cari");
+        btnSearchMekanikFaktur.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSearchMekanikFakturMouseClicked(evt);
+            }
+        });
 
+        txtNoMekanikFaktur.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNoMekanikFakturFocusLost(evt);
+            }
+        });
         txtNoMekanikFaktur.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNoMekanikFakturActionPerformed(evt);
@@ -1196,6 +1294,11 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblDetilFaktur.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDetilFakturMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(tblDetilFaktur);
 
         btnClearFaktur.setText("Bersih");
@@ -1206,8 +1309,18 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         });
 
         btnDeleteFaktur.setText("Hapus");
+        btnDeleteFaktur.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteFakturMouseClicked(evt);
+            }
+        });
 
         btnEditFaktur.setText("Ubah");
+        btnEditFaktur.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEditFakturMouseClicked(evt);
+            }
+        });
 
         btnSaveFaktur.setText("Simpan");
         btnSaveFaktur.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1285,6 +1398,8 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btnCetak.setText("Cetak");
+
         javax.swing.GroupLayout contentFakturPerbaikanLayout = new javax.swing.GroupLayout(contentFakturPerbaikan);
         contentFakturPerbaikan.setLayout(contentFakturPerbaikanLayout);
         contentFakturPerbaikanLayout.setHorizontalGroup(
@@ -1295,14 +1410,17 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
                     .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(contentFakturPerbaikanLayout.createSequentialGroup()
                         .addComponent(jLabel19)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCetak)))
                 .addContainerGap())
         );
         contentFakturPerbaikanLayout.setVerticalGroup(
             contentFakturPerbaikanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentFakturPerbaikanLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(contentFakturPerbaikanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCetak))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -2321,16 +2439,16 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
 
     private void btnSaveFakturMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveFakturMouseClicked
         // TODO add your handling code here:
+        this.saveFaktur();
+        NoFakturPerbaikan = txtNoFakturPerbaikan.getText();
+        clearFormFaktur();
+        setKdFakturPerbaikan(NoFakturPerbaikan);
     }//GEN-LAST:event_btnSaveFakturMouseClicked
 
     private void btnClearFakturMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClearFakturMouseClicked
         // TODO add your handling code here:
         clearFormFaktur();
     }//GEN-LAST:event_btnClearFakturMouseClicked
-
-    private void btnEditDtlPerbaikanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditDtlPerbaikanActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditDtlPerbaikanActionPerformed
 
     private void btnClearDtlPerbaikanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearDtlPerbaikanActionPerformed
         // TODO add your handling code here:
@@ -2341,6 +2459,75 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
         clearFormDtlPerbaikan();
     }//GEN-LAST:event_btnClearDtlPerbaikanMouseClicked
 
+    private void btnTambahDtlPerbaikanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDtlPerbaikanMouseClicked
+        // TODO add your handling code here:
+        this.saveDtlFaktur();
+        clearFormDtlPerbaikan();
+    }//GEN-LAST:event_btnTambahDtlPerbaikanMouseClicked
+
+    private void tblDetilFakturMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDetilFakturMouseClicked
+        spnJenisPerbaikan.setSelectedItem(tblDetilFaktur.getValueAt(tblDetilFaktur.getSelectedRow(), 0).toString());
+        txtMasalah.setText(tblDetilFaktur.getValueAt(tblDetilFaktur.getSelectedRow(), 1).toString());
+
+    }//GEN-LAST:event_tblDetilFakturMouseClicked
+
+    private void txtNoArmadaFakturFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNoArmadaFakturFocusLost
+        // TODO add your handling code here:
+        searchArmada(txtNoArmadaFaktur.getText());
+    }//GEN-LAST:event_txtNoArmadaFakturFocusLost
+
+    private void btnSearchArmadaFakturMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchArmadaFakturMouseClicked
+        // TODO add your handling code here:
+        searchArmada(txtNoArmadaFaktur.getText());
+    }//GEN-LAST:event_btnSearchArmadaFakturMouseClicked
+
+    private void txtNoMekanikFakturFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNoMekanikFakturFocusLost
+        // TODO add your handling code here:
+        searchMekanik(txtNoMekanikFaktur.getText());
+    }//GEN-LAST:event_txtNoMekanikFakturFocusLost
+
+    private void btnSearchMekanikFakturMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMekanikFakturMouseClicked
+        // TODO add your handling code here:
+        searchMekanik(txtNoMekanikFaktur.getText());
+    }//GEN-LAST:event_btnSearchMekanikFakturMouseClicked
+
+    private void btnDeleteDtlPerbaikanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteDtlPerbaikanMouseClicked
+        // TODO add your handling code here:
+        deleteDtlFaktur();
+    }//GEN-LAST:event_btnDeleteDtlPerbaikanMouseClicked
+
+    private void btnEditFakturMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditFakturMouseClicked
+        // TODO add your handling code here:
+        this.editFaktur();
+        NoFakturPerbaikan = txtNoFakturPerbaikan.getText();
+        clearFormFaktur();
+        setKdFakturPerbaikan(NoFakturPerbaikan);
+    }//GEN-LAST:event_btnEditFakturMouseClicked
+
+    private void btnDeleteFakturMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteFakturMouseClicked
+        oFaktur.setNoFakturPerbaikan(txtNoFakturPerbaikan.getText());
+        this.deleteFaktur();
+        clearFormFaktur();
+    }//GEN-LAST:event_btnDeleteFakturMouseClicked
+
+    private void pilihItemBerdasarkanNoJenisPerbaikan(String noJenisPerbaikan) {
+        // Mencari nama jenis perbaikan berdasarkan NoJenisPerbaikan
+        String namaJenisPerbaikanTerpilih = null;
+        for (Map.Entry<String, String> entry : jenisPerbaikanMap.entrySet()) {
+            if (entry.getValue().equals(noJenisPerbaikan)) {
+                namaJenisPerbaikanTerpilih = entry.getKey();
+                break;
+            }
+        }
+
+        // Mengatur item terpilih di JComboBox
+        if (namaJenisPerbaikanTerpilih != null) {
+            spnJenisPerbaikan.setSelectedItem(namaJenisPerbaikanTerpilih);
+        } else {
+            System.out.println("NoJenisPerbaikan tidak ditemukan: " + noJenisPerbaikan);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -2377,6 +2564,7 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCetak;
     private javax.swing.JButton btnClearArmada;
     private javax.swing.JButton btnClearDtlPerbaikan;
     private javax.swing.JButton btnClearFaktur;
@@ -2387,7 +2575,6 @@ public class frmPerbaikanTaxi extends javax.swing.JFrame {
     private javax.swing.JButton btnDeleteFaktur;
     private javax.swing.JButton btnDeleteJnsPerbaikan;
     private javax.swing.JButton btnDeleteMekanik;
-    private javax.swing.JButton btnEditDtlPerbaikan;
     private javax.swing.JButton btnEditFaktur;
     private javax.swing.JButton btnSaveArmada;
     private javax.swing.JButton btnSaveFaktur;

@@ -5,6 +5,7 @@
  */
 package ctr;
 
+import ent.entDetilFakturPerbaikan;
 import ent.entFakturPerbaikan;
 import java.util.ArrayList;
 
@@ -14,9 +15,11 @@ import java.util.ArrayList;
  */
 public class ctrFakturPerbaikan {
     entFakturPerbaikan o = new entFakturPerbaikan();
+    entDetilFakturPerbaikan oDtl = new entDetilFakturPerbaikan();
     
     public void setNoFakturPerbaikan(String pFakturPerbaikan){
         o.setNoFakturPerbaikan(pFakturPerbaikan);
+        oDtl.setNoFakturPerbaikan(pFakturPerbaikan);
         o.searchFakturPerbaikan();
     }
     
@@ -46,5 +49,6 @@ public class ctrFakturPerbaikan {
     
     public void delete(){
         o.deleteFakturPerbaikan();
+        oDtl.deleteDetilFakturPerbaikanByNoFaktur();
     }
 }
